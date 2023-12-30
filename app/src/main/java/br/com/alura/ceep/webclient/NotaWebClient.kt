@@ -25,7 +25,7 @@ class NotaWebClient {
         }
     }
 
-    suspend fun salva(nota: Nota) {
+    suspend fun salva(nota: Nota): Boolean {
         try {
             val resposta = notaService.salva(
                 nota.id, NotaRequisicao(
@@ -34,14 +34,21 @@ class NotaWebClient {
                     imagem = nota.imagem
                 )
             )
-            if (resposta.isSuccessful) {
-                Log.i("", "Nota foi salva com sucesso")
-            } else {
-                Log.i("", "Nota não foi salva")
-            }
+            return resposta.isSuccessful
         } catch (e: Exception) {
             Log.e("", "Falha ao tentar salvar", e)
         }
+        return false
+    }
+
+    suspend fun remove(id: String): Boolean {
+        try {
+            val resposta = notaService.remove(id)
+            return resposta.isSuccessful
+        } catch (e: Exception) {
+            Log.e(TAG, "remove: falha ao tentar remover nota", e)
+        }
+        return false
     }
 
 }
